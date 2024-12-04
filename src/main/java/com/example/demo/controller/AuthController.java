@@ -27,7 +27,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
-            // Проверка и получение сообщения о логине
             userService.login(loginRequest.getEmail(), loginRequest.getPassword());
             return ResponseEntity.ok("You have logged in");
         } catch (IllegalStateException e) {
