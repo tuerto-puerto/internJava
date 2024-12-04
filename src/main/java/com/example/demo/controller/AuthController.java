@@ -20,6 +20,8 @@ public class AuthController {
         try {
             JwtResponse jwtResponse = userService.register(userDTO);
             return ResponseEntity.ok(jwtResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new JwtResponse(e.getMessage(), null));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(new JwtResponse(e.getMessage(), null));
         }

@@ -25,6 +25,9 @@ public class UserService {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             throw new IllegalStateException("Email is already taken!");
         }
+        if (userDTO.getUsername() == null || userDTO.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Username is required!");
+        }
 
         User user = new User();
         user.setEmail(userDTO.getEmail());
