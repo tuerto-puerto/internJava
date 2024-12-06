@@ -43,4 +43,24 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+    public String validateTokenAndGetUsername(String token) {
+        try {
+            Claims claims = extractClaims(token);
+            if (claims.getExpiration().before(new Date())) {
+                throw new IllegalStateException("Token is expired");
+            }
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            Claims claims = extractClaims(token);
+            return claims.getExpiration().before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
+    }
 }
