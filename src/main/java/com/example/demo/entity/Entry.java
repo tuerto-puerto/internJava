@@ -14,10 +14,14 @@ public class Entry {
 
     @Column(length = 1000)
     private String content;
-
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     private String summary;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 
     // Getters and setters
     public Long getId() {
@@ -58,5 +62,12 @@ public class Entry {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

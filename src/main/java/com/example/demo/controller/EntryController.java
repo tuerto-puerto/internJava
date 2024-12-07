@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EntryRequest;
 import com.example.demo.entity.Entry;
 import com.example.demo.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,15 @@ public class EntryController {
     private EntryService entryService;
 
     @PostMapping
-    public Entry createEntry(@RequestBody Entry entry) {
-        return entryService.createEntry(entry.getTitle(), entry.getContent());
+    public Entry createEntry(@RequestBody EntryRequest entryRequest) {
+        return entryService.createEntry(entryRequest.getTitle(), entryRequest.getContent());
     }
 
     @PutMapping("/{id}")
-    public Entry updateEntry(@PathVariable Long id, @RequestBody Entry entry) {
-        return entryService.updateEntry(id, entry.getTitle(), entry.getContent());
+    public Entry updateEntry(@PathVariable Long id,
+                             @RequestParam String title,
+                             @RequestParam String content) {
+        return entryService.updateEntry(id, title, content);
     }
 
     @DeleteMapping("/{id}")
