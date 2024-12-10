@@ -4,7 +4,9 @@ import com.example.demo.dto.EntryRequest;
 import com.example.demo.entity.Entry;
 import com.example.demo.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,6 +17,20 @@ public class EntryController {
     @Autowired
     private EntryService entryService;
 
+    @Autowired
+    public EntryController(EntryService entryService) {
+        this.entryService = entryService;
+    }
+
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<String> addEntry(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+
+        entryService.addEntry(title, content, image);
+        return ResponseEntity.ok("Entry created successfully!");
+    }
     @PostMapping
     public Entry createEntry(@RequestBody EntryRequest entryRequest) {
         return entryService.createEntry(entryRequest.getTitle(), entryRequest.getContent());
@@ -40,5 +56,9 @@ public class EntryController {
     @GetMapping("/{id}")
     public Entry getEntryById(@PathVariable Long id) {
         return entryService.getEntryById(id);
+    }
+    @DeleteMapping("/{id}/image")
+    public void deleteImage(@PathVariable Long id) {
+        entryService.deleteImage(id);
     }
 }

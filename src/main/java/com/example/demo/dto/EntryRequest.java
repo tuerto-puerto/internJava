@@ -1,10 +1,12 @@
 package com.example.demo.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EntryRequest {
     private String title;
     private String content;
+    private MultipartFile image;
 
-    // Getters and setters
     public String getTitle() {
         return title;
     }
@@ -20,5 +22,14 @@ public class EntryRequest {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
+    }
 }
+
 

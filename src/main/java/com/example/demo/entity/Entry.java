@@ -2,8 +2,13 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import lombok.*;
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Entry {
 
     @Id
@@ -14,20 +19,24 @@ public class Entry {
 
     @Column(length = 1000)
     private String content;
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
 
     private String summary;
+    @Lob
+    private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    // Getters and setters
-    public Long getId() {
-        return id;
+    @OneToMany(mappedBy = "entry", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    public byte[] getImage() {
+        return image;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
     public void setId(Long id) {
         this.id = id;
     }
@@ -46,14 +55,6 @@ public class Entry {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
     }
 
     public String getSummary() {

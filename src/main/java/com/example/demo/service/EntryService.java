@@ -1,17 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Entry;
-import com.example.demo.exceptions.ApiException;
 import com.example.demo.repository.EntryRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -24,22 +22,35 @@ public class EntryService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-
-
-    public Entry createEntry(String title, String content) {
-
-        User currentUser = userService.getCurrentUser(); // Получаем пользователя
+    public Entry addEntry(String title, String content, MultipartFile image) {
+        User currentUser = userService.getCurrentUser();
 
         Entry entry = new Entry();
         entry.setTitle(title);
         entry.setContent(content);
-        entry.setCreatedDate(LocalDateTime.now());
-        entry.setSummary(content.length() > 50 ? content.substring(0, 50) + "..." : content);
-        entry.setOwner(currentUser);  // Связываем запись с текущим пользователем
+        entry.setOwner(currentUser);
 
-        return entryRepository.save(entry);  // Сохраняем запись
+        try {
+            if (image != null && !image.isEmpty()) {
+                entry.setImage(image.getBytes());
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to upload image", e);
+        }
+
+        return entryRepository.save(entry);
+    }
+    public Entry createEntry(String title, String content) {
+
+        User currentUser = userService.getCurrentUser();
+
+        Entry entry = new Entry();
+        entry.setTitle(title);
+        entry.setContent(content);
+        entry.setSummary(content.length() > 50 ? content.substring(0, 50) + "..." : content);
+        entry.setOwner(currentUser);
+
+        return entryRepository.save(entry);
     }
 
     public Entry updateEntry(Long id, String title, String content) {
@@ -83,4 +94,13 @@ public class EntryService {
         }
         return entry;
     }
+    public void deleteImage(Long id) {
+        Entry entry = entryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Entry not found"));
+
+        entry.setImage(null);
+        entryRepository.save(entry);
+    }
+
+
 }

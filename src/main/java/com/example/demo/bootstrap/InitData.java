@@ -25,7 +25,6 @@ public class InitData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Create and save 5 users
         for (int i = 1; i <= 5; i++) {
             User user = new User();
             user.setUsername("user" + i);
@@ -33,13 +32,10 @@ public class InitData implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode("password" + i));
 
             userRepository.save(user);
-
-            // Create and save 5 entries for each user
             for (int j = 1; j <= 5; j++) {
                 Entry entry = new Entry();
                 entry.setTitle("Title " + j + " for User " + i);
                 entry.setContent("This is content for Entry " + j + " of User " + i);
-                entry.setCreatedDate(LocalDateTime.now().minusDays(j));
                 entry.setSummary("Summary for Entry " + j);
                 entry.setOwner(user);
 
