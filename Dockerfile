@@ -1,18 +1,15 @@
-# Базовый образ с JDK 23 (OpenJDK, если доступен, или используем альтернативу)
-FROM openjdk:21-jdk-slim
 
-# Устанавливаем рабочую директорию
+# Use an official Java runtime as a parent image
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory
 WORKDIR /app
 
-# Копируем JAR-файл из локальной папки target в контейнер
-COPY ./target/demo-0.0.1-SNAPSHOT.jar /app/demo.jar
+# Copy the JAR file to the container
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
 
-ENV DB_HOST=localhost:8080
-ENV DB_PORT=5432
-ENV DB_USER=postgres
-ENV DB_PASSWORD=1337
-
-# Устанавливаем команду для запуска JAR-файла
-CMD ["java", "-jar", "demo.jar"]
-
+# Expose the port your application runs on
 EXPOSE 8080
+
+# Command to run the JAR file
+ENTRYPOINT ["java", "-jar", "app.jar"]
