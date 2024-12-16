@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        /* Стили для центрирования формы */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -66,16 +65,16 @@
 </div>
 
 <script>
-    // Обработчик формы
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Предотвращаем перезагрузку страницы
 
-        // Получаем данные из формы
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
         try {
-            // Отправляем POST-запрос на сервер
+
             const response = await fetch('http://64.226.67.155:8080/login', {
                 method: 'POST',
                 headers: {
@@ -84,10 +83,10 @@
                 body: JSON.stringify({ username, password })
             });
 
-            // Обрабатываем ответ сервера
+
             if (response.ok) {
                 alert('Login successful!');
-                window.location.href = 'http://64.226.67.155:8080/'; // Переход на главную страницу
+                window.location.href = 'http://64.226.67.155:8080/';
             } else {
                 const errorData = await response.json();
                 document.getElementById('errorMessage').innerText = errorData.message || 'Login failed';
